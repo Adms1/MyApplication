@@ -1,0 +1,63 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MessageCenterActivity" >
+
+    <!-- Framelayout to display Fragments -->
+    <FrameLayout
+        android:id="@+id/frame_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Listview to display slider menu -->
+     <LinearLayout
+            android:id="@+id/lldrawercontent"
+            android:layout_width="440dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/main"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"
+				android:clickable="false"
+                android:text="Main"
+                android:textSize="20sp" />
+
+            <ListView
+        		android:id="@+id/list_slidermenu_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+        		android:background="@color/list_background"
+                android:choiceMode="singleChoice"
+        		android:dividerHeight="1dp"
+                android:divider="@color/list_divider" />
+            
+            
+            <TextView
+                android:id="@+id/folders"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:clickable="false"
+                android:gravity="center"
+                android:text="Folders"
+                android:textSize="20sp" />
+
+            <ListView
+                android:id="@+id/list_slidermenu_folder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/list_background"
+                android:choiceMode="singleChoice"
+                 >
+            </ListView>
+        </LinearLayout>
+    
+</android.support.v4.widget.DrawerLayout>

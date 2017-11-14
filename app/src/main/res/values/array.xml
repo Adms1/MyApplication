@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="menuoption">
+        <item >Clock in / out</item>
+        <item >Today’s schedule</item>
+        <item >Current schedule</item>
+        <item >Today’s sales</item>
+        <item >Message Center</item>
+        <item >Reports</item>
+        <item >Award Terrific Turbo</item>
+        <item >Peer to Peer</item>
+        <item >Turbo Idea</item>
+        <item >Request Deck Assist</item>
+    </string-array>
+</resources>

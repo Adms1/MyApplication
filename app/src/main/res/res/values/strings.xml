@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LA Fitness App</string>
+    <string name="action_settings">Settings</string>
+    <string name="loginheader">Login Header</string>
+    <string name="ourmission">Our Mission</string>
+    <string name="ourmissiontext">Our mission is to educate and motivate people of all ages to be safer and learn proper 
+swimming technique.</string>
+    <string name="ourvalues">Our Values</string>
+    <string name="passiontext">We have excitement and enthusiasm for our mission and believe swimming is an 
+invaluable, year-round, life-long skill. We do this because we feel there is a swimmer in 
+everyone.</string>
+    <string name="approachabilitytext">We are welcoming, ready to listen, and available to all of our families because we take a 
+genuine and active interest in each and every person in our program.</string>
+    <string name="adaptabilitytext">We are always open to change as our customer’s needs and the industry changes. We 
+feel that change is what makes us a stronger swim school and aquatic center and allows
+us to maximize the satisfaction of the customer experience.</string>
+    <string name="selfresponsibilitytext">We expect each individual to take ownership of their actions and to be accountable for 
+their personal success. We take pride in our work and ensure our services are delivered 
+to the best of our ability.</string>
+    <string name="title_activity_dash_board">DashBoardActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_current_schedule">CurrentScheduleActivity</string>
+    <string name="title_activity_view_current_schedule">ViewCurrentScheduleActivity</string>
+    <string name="title_activity_instructor_selection">InstructorSelectionActivity</string>
+    <string name="title_activity_clockinout">ClockinoutActivity</string>
+    <string name="title_activity_todays_sales">TodaysSalesActivity</string>
+    <string name="title_activity_report">ReportActivity</string>
+
+    <string-array name="report">
+        <item>Daily Report</item>
+        <item>Experience Survey</item>
+        <item>Peer to Peer Survey</item>
+        <item>Question of the Month</item>
+        <item>View Individual Performance</item>
+        <item>Renewal Rates by Site</item>
+        
+        <item>View My Time Card</item>
+        <item>Submit Work Request</item>
+       <item>Report Pool Issue</item>
+       <item>Report Maintenance Issue</item>
+       <item>Report IT Issue</item>
+       <item>Report Customer Concern</item>
+       <item>Request a Suit</item>
+       <item>Request Time Off</item>
+    </string-array>
+    <string-array name="daily_reports">
+        <item>Aquatics Director Report</item>
+        <item>Area Quality Manager Report</item>
+        <item>Aquatics Manager Report</item>
+        <item>Quality Manager Report</item>
+        <item>Lead Trainer Report</item>
+        <item>Training Report</item>
+        <item>Senior Instructors Report</item>
+        <item>Senior Deck Supervisor Report</item>
+        <item>Deck Supervisor Report</item>
+        <item >LA Fitness/City Sports Instructor Daily Report</item>
+        <item >LA Fitness/City Sports Manager Report</item>
+         <item >LA Fitness/City Sports Lead Instuctor</item>
+    </string-array>
+    <string-array name="level">
+        <item>P1</item>
+        <item>P2</item>
+        <item>P3</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="hour">
+        <item>hr</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+    <string-array name="min">
+        <item>min</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+    </string-array>
+    <string-array name="am_pm">
+        <item>am/pm</item>
+        <item>am</item>
+        <item>pm</item>
+    </string-array>
+
+    <string name="title_activity_daily_report">DailyReportActivity</string>
+    <string name="title_activity_todays_schedule">TodaysScheduleActivity</string>
+
+</resources>

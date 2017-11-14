@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="waterworks.lafitnessapp"
+    android:versionCode="51"
+    android:versionName="5.9">
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="23"
+        tools:overrideLibrary="android.support.v17.leanback,android.support.test" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.INSTALL_PACKAGES" />-->
+    <uses-permission android:name="android.permission.ACCESS_SUPERUSER" />
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:name=".MyApp">
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Authenticating"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".DashBoardActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".MessageCenterActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".DetailMailActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".MessageCenterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".CreateNewMessageActivity"
+            android:configChanges="orientation|screenSize"
+            android:parentActivityName=".MessageCenterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".ToAndCcSelectionActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".CurrentScheduleActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".ScheduleActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".InstructorSelectionActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="adjustResize"></activity>
+        <activity
+            android:name=".DetailReportActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".ModifyComments"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".ClockinoutActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_clockinout"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".TodaysSalesActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_todays_sales"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".AwardTurboActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".TurboIdeaActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".RequestDeckMenuActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".ReportActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_report"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".DailyReportActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_daily_report"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".TodaysScheduleActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_todays_schedule"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".ViewCurrentLessonActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".SubmitWorkReport"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+    </application>
+
+</manifest>
