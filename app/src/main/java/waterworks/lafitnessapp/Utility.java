@@ -1,4 +1,4 @@
-package waterworks.lafitnessapp.utility;
+package waterworks.lafitnessapp;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,7 +39,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 //import android.support.v7.widget.PopupMenu.OnMenuItemClickListener;
 
-@SuppressWarnings("unused")
 public class Utility {
 	public Dialog dia;
 	 private DatePicker date_picker;

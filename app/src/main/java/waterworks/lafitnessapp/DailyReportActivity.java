@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

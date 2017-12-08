@@ -23,10 +23,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import waterworks.lafitnessapp.adapter.AttandanceAdapter;
 import waterworks.lafitnessapp.adapter.AttendanceItems;
-import waterworks.lafitnessapp.utility.AppConfig;
 import waterworks.lafitnessapp.utility.SingleOptionAlertWithoutTitle;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
 import waterworks.lafitnessapp.customlibrary.Titanic;
 import waterworks.lafitnessapp.customlibrary.TitanicTextView;
 import android.annotation.SuppressLint;

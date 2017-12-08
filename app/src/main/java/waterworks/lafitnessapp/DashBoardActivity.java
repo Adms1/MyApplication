@@ -15,9 +15,6 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import waterworks.lafitnessapp.adapter.CustomMenuDataPageAdapter;
 import waterworks.lafitnessapp.adapter.HomeGridMenuOptionAdapter;
-import waterworks.lafitnessapp.utility.AppConfig;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
 
 import android.app.Activity;
 import android.app.AlertDialog;

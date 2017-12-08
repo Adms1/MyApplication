@@ -19,11 +19,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 
 import waterworks.lafitnessapp.model.AllInstructorItems;
-import waterworks.lafitnessapp.model.TodaysScheduleAdapterItem;
-import waterworks.lafitnessapp.utility.AppConfig;
 import waterworks.lafitnessapp.utility.SingleOptionAlertWithoutTitle;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -55,9 +51,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;

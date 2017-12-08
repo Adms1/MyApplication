@@ -1,4 +1,4 @@
-package waterworks.lafitnessapp.utility;
+package waterworks.lafitnessapp;
 
 public class AppConfig {
 	public static String NAMESPACE = "http://tempuri.org/";

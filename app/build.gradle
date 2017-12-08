@@ -21,9 +21,9 @@ android {
         applicationId "waterworks.lafitnessapp"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 51
-        versionName "5.9    "
-//        multiDexEnabled true
+        versionCode 52
+        versionName "6.0"
+        multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
 
     }
@@ -45,7 +45,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
 
     compile files('libs/org.apache.http.legacy.jar')
     compile files('libs/nineoldandroids-2.4.0.jar')
@@ -59,10 +58,14 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    //    compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'net.fredericosilva:showTipsView:1.0.4'
     compile 'com.google.android.gms:play-services:8.1.0'
     compile 'com.pubnub:pubnub-android:3.7.2'
-//    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:multidex:1.0.0'
+
 }

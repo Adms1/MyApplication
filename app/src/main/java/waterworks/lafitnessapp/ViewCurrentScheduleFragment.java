@@ -20,10 +20,8 @@ import waterworks.lafitnessapp.Swipe.SwipeListView;
 import waterworks.lafitnessapp.adapter.ViewCurrentScheduleAdapter;
 
 import waterworks.lafitnessapp.model.ViewCurrentScheduleAdapterItem;
-import waterworks.lafitnessapp.utility.AppConfig;
 import waterworks.lafitnessapp.utility.SingleOptionAlertWithoutTitle;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
+
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;

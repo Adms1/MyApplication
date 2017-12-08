@@ -11,10 +11,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import waterworks.lafitnessapp.utility.AppConfig;
 import waterworks.lafitnessapp.utility.SingleOptionAlertWithoutTitle;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -389,6 +387,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 				Log.i("Code", code);
 				if (code.equals("000")) {
 					login_status = true;
+					pDialog.dismiss();
 					Object mSoapObject3 =  mSoapObject1.getProperty(1);
 					Log.i(Tag, "mSoapObject3="+mSoapObject3);
 					String resp = mSoapObject3.toString();

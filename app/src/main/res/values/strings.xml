@@ -53,7 +53,7 @@ to the best of our ability.</string>
         <item>Peer to Peer Survey</item>
         <item>Experience Survey</item>
         <item>View Individual Performance</item>
-        <item>Question of the Month</item>
+        <item>Question of the Week</item>
         <item>View My Time Card</item>
         <item>Renewal Rates by Site</item>
         <item>Report Pool Issue</item>
@@ -64,6 +64,7 @@ to the best of our ability.</string>
         <item>Report Customer Concern</item>
         <item>Time Clock Adjustment</item>
         <item>Request Time Off</item>
+        <item>Feedback Survey</item>
 
     </string-array>
 
@@ -182,6 +183,7 @@ to the best of our ability.</string>
 
     <string name="title_activity_daily_report">DailyReportActivity</string>
     <string name="title_activity_todays_schedule">TodaysScheduleActivity</string>
+    <string name="title_activity_feedback_survey">FeedbackSurveyActivity</string>
 
 
 </resources>

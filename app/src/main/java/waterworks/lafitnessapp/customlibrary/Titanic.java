@@ -9,7 +9,7 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.view.animation.LinearInterpolator;
 
-import waterworks.lafitnessapp.utility.WW_StaticClass;
+import waterworks.lafitnessapp.WW_StaticClass;
 
 /**
  * Titanic

@@ -22,11 +22,11 @@ import waterworks.lafitnessapp.TodaysScheduleActivity;
 import waterworks.lafitnessapp.TodaysScheduleFragment;
 
 import waterworks.lafitnessapp.model.TodaysScheduleAdapterItem;
-import waterworks.lafitnessapp.utility.AppConfig;
+import waterworks.lafitnessapp.AppConfig;
 import waterworks.lafitnessapp.utility.MyTagHandler;
 import waterworks.lafitnessapp.utility.SingleOptionAlertWithoutTitle;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
+import waterworks.lafitnessapp.Utility;
+import waterworks.lafitnessapp.WW_StaticClass;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.app.Activity;

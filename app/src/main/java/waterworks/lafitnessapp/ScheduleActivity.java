@@ -21,10 +21,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import waterworks.lafitnessapp.adapter.AllInstructorListAdapter;
 
 import waterworks.lafitnessapp.model.AllInstructorItems;
-import waterworks.lafitnessapp.utility.AppConfig;
 import waterworks.lafitnessapp.utility.SingleOptionAlertWithoutTitle;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;

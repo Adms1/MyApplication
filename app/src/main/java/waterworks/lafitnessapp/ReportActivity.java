@@ -2,10 +2,6 @@ package waterworks.lafitnessapp;
 
 import java.util.Calendar;
 
-import waterworks.lafitnessapp.utility.AppConfig;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -179,8 +175,9 @@ public class ReportActivity extends Activity implements OnClickListener {
                         Intent i5 = new Intent(getApplicationContext(),
                                 DetailReportActivity.class);
                         i5.putExtra("FROM", "");
-                        i5.putExtra("url",
-                                "http://reports.waterworksswim.com/reports/office/Qmonth.php");
+//                        i5.putExtra("url",
+//                                "http://reports.waterworksswim.com/reports/office/Qmonth.php")
+                        i5.putExtra("url", "http://reports.waterworksswim.com/reports/office/Qweek.php");
                         startActivity(i5);
                         break;
                     case 6:
@@ -275,8 +272,12 @@ public class ReportActivity extends Activity implements OnClickListener {
                                         + WW_StaticClass.InstructorID);
                         startActivity(i15);
                         break;
-
-
+                    case 16:
+                        Intent i16 = new Intent(getApplicationContext(), DetailReportActivity.class);
+                        i16.putExtra("FROM", "");
+                        i16.putExtra("url", "http://reports.waterworksswim.com/reports/office/feedback_srvy.php");
+                        startActivity(i16);
+                        break;
                     default:
                         break;
                 }

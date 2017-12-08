@@ -15,11 +15,11 @@ import waterworks.lafitnessapp.ModifyComments;
 
 import waterworks.lafitnessapp.R;
 import waterworks.lafitnessapp.ViewCurrentLessonActivity;
-import waterworks.lafitnessapp.utility.AppConfig;
+import waterworks.lafitnessapp.AppConfig;
 import waterworks.lafitnessapp.utility.MyTagHandler;
 import waterworks.lafitnessapp.utility.SingleOptionAlertWithoutTitle;
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
+import waterworks.lafitnessapp.Utility;
+import waterworks.lafitnessapp.WW_StaticClass;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

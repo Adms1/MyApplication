@@ -20,9 +20,6 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import waterworks.lafitnessapp.utility.AppConfig;
-import waterworks.lafitnessapp.utility.Utility;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;

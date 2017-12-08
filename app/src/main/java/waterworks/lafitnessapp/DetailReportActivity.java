@@ -2,9 +2,6 @@ package waterworks.lafitnessapp;
 
 import java.util.Calendar;
 
-import waterworks.lafitnessapp.utility.Utility;
-import waterworks.lafitnessapp.utility.WW_StaticClass;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;

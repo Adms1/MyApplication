@@ -1,4 +1,4 @@
-package waterworks.lafitnessapp.utility;
+package waterworks.lafitnessapp;
 
 import java.util.ArrayList;
 
