@@ -246,18 +246,20 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <TextView
+            <WebView
                 android:id="@+id/detail_msg_msg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/ll_detail_msg_cc"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
-                android:paddingBottom="30dp"
-                android:text=""
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:textColor="@color/texts1" />
+                tools:ignore="WebViewLayout" />
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:paddingBottom="30dp"-->
+                <!--android:text=""-->
+                <!--android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"-->
+                <!--android:textColor="@color/texts1"-->
+
            
         </RelativeLayout>
     </ScrollView>

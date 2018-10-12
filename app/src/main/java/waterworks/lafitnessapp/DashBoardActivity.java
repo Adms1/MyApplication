@@ -136,7 +136,7 @@ public class DashBoardActivity extends Activity implements OnClickListener {
 								"http://forms.waterworksswim.com/survey_office/peer.php?type=A&uid="
 										+ WW_StaticClass.UserName);*///Old URL
 						i.putExtra("url",
-								"http://reports.waterworksswim.com/reports/office/peer.php?type=O&uid=jon"
+								"http://reports.waterworksswim.com/reports/office/peer.php?type=O&uid="
 										+ WW_StaticClass.UserName);
 						startActivity(i);
 						

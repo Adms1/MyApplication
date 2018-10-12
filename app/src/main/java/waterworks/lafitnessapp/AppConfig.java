@@ -86,7 +86,25 @@ public class AppConfig {
 	public static String Insert_Attandance_ForToday_Action = NAMESPACE
 			+ "Insert_Attandance_ForToday_LA";
 	public static String CheckTimeClicks_Action = NAMESPACE
-			+ "CheckTimeClicks";
+			+ "CheckTimeClicksNew";
+	//code by megha
+	public static String Check_ClockIn_Action = NAMESPACE
+			+ "CheckClockIn";
+	public static String Check_ClockIn_FromBreak_Action = NAMESPACE
+			+ "CheckClockInFromBreak";
+	public static String Check_ClockOut_ForBreak_Action = NAMESPACE
+			+ "CheckClockOutForBreak";
+	public static String CheckClockOut_Action = NAMESPACE
+			+ "CheckClockOut";
+
+
+
+	public static String AddTickReasonSession_Action = NAMESPACE
+			+ "AddTickReasonSession";
+
+	public static String AddTickReasonSessionOut_Action=NAMESPACE
+			+"AddTickReasonSessionOut";
+	//
 	public static String ProcessTimeClicks_Action = NAMESPACE
 			+ "ProcessTimeClicks";
 	public static String GetSales_Action = NAMESPACE
@@ -146,7 +164,7 @@ public class AppConfig {
 	public static String InsertStudentComment_Method = "InsertStudentComment";
 	public static String ViewSchl_GetViewScheduleByDateAndInstrid_Method = "ViewSchl_GetViewScheduleByDateAndInstrid";
 	public static String Insert_Attandance_ForToday_Method = "Insert_Attandance_ForToday_LA";
-	public static String CheckTimeClicks_Method = "CheckTimeClicks";
+	public static String CheckTimeClicks_Method = "CheckTimeClicksNew";
 	public static String ProcessTimeClicks_Method = "ProcessTimeClicks";
 	public static String GetSales_Method = "GetSales";
 	public static String InsertProductDelievered_Method = "InsertProductDelievered";
@@ -158,6 +176,15 @@ public class AppConfig {
 	public static String InsertDeckAssistUser_Method = "InsertDeckAssistUser";
 	public static String GetISAAlertBySite_Method = "GetISAAlert";
 	public static String GETISAAlertBySite1_Method = "GetISAAlertBySite";
+
+	//code by megha
+
+	public static String Check_ClockIn = "CheckClockIn";
+	public static String Check_ClockIn_FromBreak = "CheckClockInFromBreak";
+	public static String Check_ClockOut_ForBreak = "CheckClockOutForBreak";
+	public static String Check_ClockOut= "CheckClockOut";
+	public static String AddTickReasonSession = "AddTickReasonSession";
+	public static String AddTickReasonSessionOut="AddTickReasonSessionOut";
 
 	//-----------------------------------------------------
 	public static String SOAP_Action_Insert_SwimCompCancellation= "http://tempuri.org/Insert_SwimCompCancellation";

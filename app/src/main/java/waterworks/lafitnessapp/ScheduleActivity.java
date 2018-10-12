@@ -21,6 +21,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import waterworks.lafitnessapp.adapter.AllInstructorListAdapter;
 
 import waterworks.lafitnessapp.model.AllInstructorItems;
+import waterworks.lafitnessapp.model.ViewCurrentScheduleAdapterItem;
 import waterworks.lafitnessapp.utility.SingleOptionAlertWithoutTitle;
 
 import android.annotation.SuppressLint;
@@ -51,6 +52,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,9 +65,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ScheduleActivity extends Activity implements AnimationListener {
+    public static final int request_shadow = 0;
+    public static final int request_deck = 1;
     private static final String TAG = "Current Schedule";
-    private DrawerLayout mDrawerLayout;
-    private RelativeLayout ll_filter;
+    public static TextView tv_scheduletime, tv_instructor_name, tv_lessonname;
+    public static ArrayList<String> ClickPos = new ArrayList<String>();
+    public static ArrayList<String> Instroctorname = new ArrayList<String>();
+    public static ArrayList<String> Instroctorid = new ArrayList<String>();
+    public static boolean searchClick = false;
+    //    	public static String Shadow_poolid = "poolid";
+    public static String Shadow_poolid = "0";
+    public static Thread t;
+    static String InstrIschlAry = "";
+    public ArrayList<String> UserId, UserName;
+    public ImageView drawerImageView, isa_main;
+    public String inst_name, inst_id;
+    public ImageButton btn_next, btn_prev;
+    public String token = "";
     boolean isInternetPrecent = false, getinstructor = false,
             other_problem = false, server_response = false,
             connectionout = false, getlevel = false, getschedule = false,
@@ -73,26 +89,14 @@ public class ScheduleActivity extends Activity implements AnimationListener {
     ActionBar actionBar;
     ListView lv_filter_instructor;
     ActionBarDrawerToggle mDrawerToggle;
-    public ArrayList<String> UserId, UserName;
-    private ArrayList<AllInstructorItems> navDrawerItems_main;
-    private AllInstructorListAdapter adapter_main;
-    public ImageView drawerImageView, isa_main;
     TextView actionBarTitleview;
     LinearLayout actionBarLayout;
     Fragment fragment;
     String currentDateandTime;
-    public String inst_name, inst_id;
-    public ImageButton btn_next, btn_prev;
     int viewpos = 0;
     String FROM;
     Timer t1;
     Button btn_search;
-    public static TextView tv_scheduletime, tv_instructor_name, tv_lessonname;
-    public static ArrayList<String> ClickPos = new ArrayList<String>();
-    public static ArrayList<String> Instroctorname = new ArrayList<String>();
-    public static ArrayList<String> Instroctorid = new ArrayList<String>();
-
-    public static boolean searchClick = false;
     LinearLayout llbody;
     /**
      * Harsh - Shadow Request change
@@ -100,15 +104,22 @@ public class ScheduleActivity extends Activity implements AnimationListener {
     Button mBtn_request_shadow;
     ArrayList<String> SiteID = new ArrayList<String>();
     ArrayList<String> IScheduleID = new ArrayList<String>();
-
+    ArrayList<String> new_InstructorID = new ArrayList<String>();
     String whattimeforassist = "-1";
     String desk_poolid = "-1";
-    String emp_type_for_cee = "", emp_type_for_cee_manager = "", emp_type_for_aquatics = "", emp_userid_for_cee = "", emp_userid_for_cee_manager = "", emp_userid_for_aquatics = "";
-//    	public static String Shadow_poolid = "poolid";
-    public static String Shadow_poolid = "0";
+    String emp_type_for_cee = "",Shadow_reason = "", emp_type_for_cee_manager = "", emp_type_for_aquatics = "", emp_userid_for_cee = "", emp_userid_for_cee_manager = "", emp_userid_for_aquatics = "";
     boolean status_shadow = false;
-    static String InstrIschlAry = "";
-    public String token = "";
+    int oldmin, newmin, oldmil, newmil, count = 1;
+    Animation animBlink;
+    ArrayList<String> PoolName, PoolId;
+    boolean pool_status, server_status = false, shadow_click = false, deck_click = false;
+    Dialog dialog = null;
+    int wu_avail = 2;
+    ProgressDialog pDialog2;
+    private DrawerLayout mDrawerLayout;
+    private RelativeLayout ll_filter;
+    private ArrayList<AllInstructorItems> navDrawerItems_main;
+    private AllInstructorListAdapter adapter_main;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,6 +252,7 @@ public class ScheduleActivity extends Activity implements AnimationListener {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 searchClick = true;
+                Instroctorid.clear();
                 for (int i = 0; i < UserId.size(); i++) {
                     if (i == 0) {
                         inst_id = UserId.get(i);
@@ -252,10 +264,11 @@ public class ScheduleActivity extends Activity implements AnimationListener {
                     Instroctorid.add(UserId.get(i));
                     Instroctorname.add(UserName.get(i));
                 }
-
+//
                 if (Instroctorid.size() > 0) {
                     new GetAttendance().execute();
                 }
+                //new GetCurrentSchedule().execute();
 
                 displayView_Main(0);
                 if (mDrawerLayout.isDrawerOpen(ll_filter)) {
@@ -270,6 +283,7 @@ public class ScheduleActivity extends Activity implements AnimationListener {
                 // TODO Auto-generated method stub
                 Log.i(TAG, "Selected item = " + ClickPos);
                 searchClick = true;
+                Instroctorid.clear();
                 for (int i = 0; i < ClickPos.size(); i++) {
                     if (i == 0) {
                         inst_id = UserId.get(Integer.parseInt(ClickPos.get(i)));
@@ -287,6 +301,7 @@ public class ScheduleActivity extends Activity implements AnimationListener {
                 }
                 if (Instroctorid.size() > 0) {
                     new GetAttendance().execute();
+//                    new GetCurrentSchedule().execute();
                 }
             }
         });
@@ -326,7 +341,8 @@ public class ScheduleActivity extends Activity implements AnimationListener {
             onDetectNetworkState().show();
         } else {
             new GetAllInstructor().execute();
-            new GetAttendance().execute();
+//            new GetAttendance().execute();
+//            new GetCurrentSchedule().execute();
             if (FROM.toString().equalsIgnoreCase("CURRENT")) {
                 t1 = new Timer();
                 t1.scheduleAtFixedRate(new TimerTask() {
@@ -373,9 +389,6 @@ public class ScheduleActivity extends Activity implements AnimationListener {
         finish();
         searchClick = false;
     }
-
-    public static Thread t;
-    int oldmin, newmin, oldmil, newmil, count = 1;
 
     private void SetRefreshView() {
         // TODO Auto-generated method stub
@@ -475,119 +488,6 @@ public class ScheduleActivity extends Activity implements AnimationListener {
         return builder1.create();
     }
 
-    private class GetAllInstructor extends AsyncTask<Void, Void, Void> {
-        ProgressDialog pDialog;
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            Date date = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-            currentDateandTime = format.format(date);
-            navDrawerItems_main.clear();
-            pDialog = new ProgressDialog(ScheduleActivity.this);
-            pDialog.setTitle("Please wait...");
-            pDialog.setMessage("Fetching Instructors...");
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-            SoapObject request = new SoapObject(AppConfig.NAMESPACE,
-                    AppConfig.Get_InstrctListForMgrBySite_Method);
-            request.addProperty("token", token);
-            request.addProperty("siteid", WW_StaticClass.siteid.toString()
-                    .replaceAll("\\[", "").replaceAll("\\]", ""));
-            request.addProperty("strRScheDate", currentDateandTime);
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                    SoapEnvelope.VER11); // Make an Envelop for sending as whole
-            envelope.dotNet = true;
-            envelope.setOutputSoapObject(request);
-            Log.i("Request", "Request = " + request);
-            HttpTransportSE androidHttpTransport = new HttpTransportSE(
-                    AppConfig.SOAP_ADDRESS);
-            try {
-                androidHttpTransport.call(
-                        AppConfig.Get_InstrctListForMgrBySite_Action, envelope); // Calling
-                // Web
-                // service
-                SoapObject response = (SoapObject) envelope.getResponse();
-                Log.i(TAG, "" + response.toString());
-                SoapObject mSoapObject1 = (SoapObject) response.getProperty(0);
-                SoapObject mSoapObject2 = (SoapObject) mSoapObject1
-                        .getProperty(0);
-                String code = mSoapObject2.getPropertyAsString(0).toString();
-                Log.i("Code", code);
-                if (code.equalsIgnoreCase("000")) {
-                    getinstructor = true;
-                    Object mSoapObject3 = mSoapObject1.getProperty(1);
-                    Log.i(TAG, "mSoapObject3=" + mSoapObject3);
-                    String resp = mSoapObject3.toString();
-                    JSONObject jo = new JSONObject(resp);
-                    JSONArray jArray = jo.getJSONArray("InstrListBySiteid");
-                    Log.i(TAG, "jArray : " + jArray.toString());
-                    UserId = new ArrayList<String>();
-                    UserName = new ArrayList<String>();
-                    JSONObject jsonObject;
-                    for (int i = 0; i < jArray.length(); i++) {
-                        jsonObject = jArray.getJSONObject(i);
-                        UserName.add(jsonObject.getString("UserName"));
-                        UserId.add(jsonObject.getString("Userid"));
-                    }
-                } else {
-                    getinstructor = false;
-                }
-            } catch (SocketException e) {
-                e.printStackTrace();
-                other_problem = true;
-            } catch (SocketTimeoutException e) {
-                e.printStackTrace();
-                other_problem = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                server_response = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                server_response = true;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // TODO Auto-generated method stub
-            super.onPostExecute(result);
-            pDialog.dismiss();
-            if (server_response) {
-                server_response = false;
-                onDetectNetworkState().show();
-            } else if (other_problem) {
-                other_problem = false;
-                new GetAllInstructor().execute();
-            } else {
-                if (!getinstructor) {
-                    Toast.makeText(getApplicationContext(),
-                            "No instructor found", Toast.LENGTH_LONG).show();
-                    navDrawerItems_main.add(new AllInstructorItems(
-                            "No instructor found."));
-                } else {
-                    getinstructor = false;
-                    for (int i = 0; i < UserId.size(); i++) {
-                        navDrawerItems_main.add(new AllInstructorItems(UserName
-                                .get(i)));
-                    }
-                    adapter_main = new AllInstructorListAdapter(
-                            getApplicationContext(), navDrawerItems_main);
-                    lv_filter_instructor.setAdapter(adapter_main);
-                    displayView_Main(0);
-                }
-            }
-        }
-    }
-
     public void displayView_Main(int position) {
         // update the main content by replacing fragments
         if (FROM.toString().equalsIgnoreCase("CURRENT")) {
@@ -600,6 +500,7 @@ public class ScheduleActivity extends Activity implements AnimationListener {
             }
             if (Instroctorid.size() > 0) {
                 new GetAttendance().execute();
+//                new GetCurrentSchedule().execute();
             }
         }
         if (fragment != null) {
@@ -616,114 +517,6 @@ public class ScheduleActivity extends Activity implements AnimationListener {
             Log.e(TAG, "Error in creating fragment");
         }
     }
-
-    private class GetISAAlert extends AsyncTask<Void, Void, Void> {
-        String DateandTime = "";
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            Date date = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-            DateandTime = format.format(date);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-            SoapObject request = new SoapObject(AppConfig.NAMESPACE,
-                    AppConfig.GetISAAlertBySite_Method);
-
-            request.addProperty("token", token);
-            request.addProperty("Rinstructorid", WW_StaticClass.InstructorID.toString()
-                    .replaceAll("\\[", "").replaceAll("\\]", ""));
-            request.addProperty("strRScheDate", DateandTime.toString().trim());
-            Log.e("request--", "" + request);
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                    SoapEnvelope.VER11); // Make an Envelop for sending as whole
-            envelope.dotNet = true;
-            envelope.setOutputSoapObject(request);
-            Log.i("Request", "Request = " + request);
-            HttpTransportSE androidHttpTransport = new HttpTransportSE(
-                    AppConfig.SOAP_ADDRESS);
-            try {
-                androidHttpTransport.call(AppConfig.GetISAAlertBySite_Action,
-                        envelope); // Calling Web service
-                SoapObject response = (SoapObject) envelope.getResponse();
-                Log.i("Any Aquatics", "Result : " + response.toString());
-                SoapObject mSoapObject1 = (SoapObject) response.getProperty(0);
-                SoapObject mSoapObject2 = (SoapObject) mSoapObject1
-                        .getProperty(0);
-                String code = mSoapObject2.getPropertyAsString(0).toString();
-                if (code.equals("000")) {
-                    getISA = true;
-                    Object mSoapObject3 = mSoapObject1.getProperty(1);
-                    JSONObject jo = new JSONObject(mSoapObject3.toString());
-                    JSONArray jArray = jo.getJSONArray("ISAAlert");
-                    Log.e("jArray--", "" + jArray);
-                    JSONObject jsonObject;
-                    for (int i = 0; i < jArray.length(); i++) {
-                        jsonObject = jArray.getJSONObject(i);
-                        ISAFlag = jsonObject.getBoolean("ISAFlag");
-                    }
-                    Log.i(TAG, "" + ISAFlag);
-                } else {
-                    getISA = false;
-                }
-            } catch (SocketTimeoutException e) {
-                // TODO: handle exception
-                e.printStackTrace();
-                connectionout = true;
-            } catch (SocketException e) {
-                e.printStackTrace();
-                connectionout = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                server_response = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                server_response = true;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // TODO Auto-generated method stub
-            super.onPostExecute(result);
-            if (server_response) {
-                server_response = false;
-                if(!ScheduleActivity.this.isFinishing()){
-                    onDetectNetworkState().show();}
-            } else if (connectionout) {
-                connectionout = false;
-
-                    new GetISAAlert().execute();
-
-            } else {
-                if (getISA) {
-                    getISA = false;
-                    if (ISAFlag) {
-                        isa_main.invalidate();
-                        isa_main.setVisibility(View.VISIBLE);
-                        isa_main.startAnimation(animBlink);
-                        ISAFlag = false;
-                    } else {
-                        isa_main.invalidate();
-                        isa_main.clearAnimation();
-                        isa_main.setVisibility(View.INVISIBLE);
-                    }
-                } else {
-                    isa_main.invalidate();
-                    isa_main.clearAnimation();
-                    isa_main.setVisibility(View.INVISIBLE);
-                }
-            }
-        }
-    }
-
-    Animation animBlink;
 
     @Override
     public void onAnimationStart(Animation animation) {
@@ -744,204 +537,6 @@ public class ScheduleActivity extends Activity implements AnimationListener {
 
     }
 
-    ArrayList<String> PoolName, PoolId;
-    boolean pool_status, server_status = false, shadow_click = false, deck_click = false;
-    public static final int request_shadow = 0;
-    public static final int request_deck = 1;
-    Dialog dialog = null;
-
-    public class IamInPool extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            //			WW_StaticClass.Siteid = ViewCurrentScheduleFragment.SiteID.get(0);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            SoapObject request = new SoapObject(AppConfig.NAMESPACE, AppConfig.METHOD_NAME_GETPOOLLIST);
-            request.addProperty("token", token);
-            request.addProperty("siteid", ViewCurrentScheduleFragment.SiteID.get(0));
-            // Log.i(Tag, "Login name"+mEd_User.getText().toString());
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                    SoapEnvelope.VER11); // Make an Envelop for sending as whole
-            envelope.dotNet = true;
-            envelope.setOutputSoapObject(request);
-            Log.i("Request", "Request = " + request);
-            HttpTransportSE androidHttpTransport = new HttpTransportSE(
-                    AppConfig.SOAP_ADDRESS);
-            PoolId = new ArrayList<String>();
-            PoolName = new ArrayList<String>();
-            try {
-                androidHttpTransport.call(AppConfig.SOAP_ACTION_POOLLIST, envelope); // Calling
-                // Web
-                // service
-
-                SoapObject response = (SoapObject) envelope.getResponse();
-                Log.i("here", "Result : " + response.toString());
-                SoapObject mSoapObject1 = (SoapObject) response.getProperty(0);
-                Log.i("Current Lesson", "mSoapObject1=" + mSoapObject1);
-                SoapObject mSoapObject2 = (SoapObject) mSoapObject1.getProperty(0);
-                Log.i("Current Lesson", "mSoapObject2=" + mSoapObject2);
-                String code = mSoapObject2.getPropertyAsString(0).toString();
-                Log.i("Code", code);
-                //			response.toString();
-                if (code.equals("000")) {
-                    pool_status = true;
-                    Object mSoapObject3 = mSoapObject1.getProperty(1);
-                    Log.i("Current Lesson", "mSoapObject3=" + mSoapObject3);
-                    String resp = mSoapObject3.toString();
-
-
-                    Log.i("here", "Result : " + resp.toString());
-                    JSONObject jobj = new JSONObject(resp);
-                    JSONArray mArray = jobj.getJSONArray("Pools");
-                    for (int i = 0; i < mArray.length(); i++) {
-                        JSONObject mJsonObjectFee = mArray.getJSONObject(i);
-                        PoolId.add(mJsonObjectFee.getString("PoolId"));
-                        PoolName.add(mJsonObjectFee.getString("PoolName"));
-                    }
-                } else {
-                    pool_status = false;
-                }
-            } catch (Exception e) {
-                server_status = true;
-                e.printStackTrace();
-
-            }
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(Void result) {
-            dialog = new Dialog(ScheduleActivity.this);
-            if (server_status) {
-                SingleOptionAlertWithoutTitle.ShowAlertDialog(
-                        ScheduleActivity.this, "WaterWorks", "Server not responding.\nPlease check internet connection or try after sometime.", "OK");
-                server_status = false;
-            } else {
-                if (pool_status) {
-                    if (shadow_click) {
-                        showDialog(request_shadow);
-                        shadow_click = false;
-                    } else if (deck_click) {
-                        showDialog(request_deck);
-                        deck_click = false;
-                    } else {
-                        Log.i("Nothing Click", "Nothing Click");
-                    }
-                    pool_status = false;
-                } else {
-                    SingleOptionAlertWithoutTitle.ShowAlertDialog(ScheduleActivity.this, "WaterWorks", "No pool found", "Ok");
-                }
-            }
-        }
-    }
-
-
-    int wu_avail = 2;
-
-    private class GetAttendance extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-            Date date = new Date();
-            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
-            currentDateandTime = format.format(date);
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-
-            for (int j = 0; j < Instroctorid.size(); j++) {
-
-                SoapObject request = new SoapObject(AppConfig.NAMESPACE,
-                        AppConfig.METHOD_NAME_GetAttendanceList);
-                request.addProperty("token", token);
-                request.addProperty("Rinstructorid", Instroctorid.get(j));
-                request.addProperty("strRScheDate", currentDateandTime);
-                //			request.addProperty("strRScheDate","01/18/2015 09:00 AM" );
-
-                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                        SoapEnvelope.VER11); // Make an Envelop for sending as whole
-                envelope.dotNet = true;
-                envelope.setOutputSoapObject(request);
-                Log.i("Request", "Request = " + request);
-                HttpTransportSE androidHttpTransport = new HttpTransportSE(
-                        AppConfig.SOAP_ADDRESS);
-                try {
-                    androidHttpTransport.call(AppConfig.SOAP_Action_AttendanceList,
-                            envelope); // Calling Web service
-                    SoapObject response = (SoapObject) envelope.bodyIn;
-                    Log.i(TAG, "Result : " + response.toString());
-                    SoapPrimitive sp1 = (SoapPrimitive) response.getProperty(0);
-                    String resp = sp1.toString();
-                    JSONObject jo = new JSONObject(resp);
-                    wu_avail = jo.getInt("wu_avail");
-                    //				ISAFlag = jo.getBoolean("ISAFlag");
-                    if (wu_avail == 0) {
-
-                    } else if (wu_avail == 1 || wu_avail == 2) {
-
-                        JSONArray jArray = jo.getJSONArray("Attendance");
-                        Log.i(TAG, "jArray : " + jArray.toString());
-
-                        JSONObject jsonObject;
-                        JSONObject jsonObject2, jsonObject3;
-                        JSONArray jArray2;
-                        JSONArray jArray3 = null;
-                        for (int k = 0; k < jArray.length(); k++) {
-                            jsonObject = jArray.getJSONObject(k);
-                            Log.i(TAG, "jsonObject: " + jsonObject.toString());
-
-                            jArray2 = jsonObject.getJSONArray("Items");
-                            Log.i(TAG, "jArray2 : " + jArray2.toString());
-                            for (int i = 0; i < jArray2.length(); i++) {
-                                jsonObject2 = jArray2.getJSONObject(i);
-                                //								SiteID.add(jsonObject2.getString("SiteID"));
-                                IScheduleID.add(jsonObject2.getString("IScheduleID"));
-                            }
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (SocketTimeoutException e) {
-                    // TODO: handle exception
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // TODO Auto-generated method stub
-            super.onPostExecute(result);
-
-            ArrayList<String> temp_array = new ArrayList<String>();
-            if (Instroctorid.size() > 0 && IScheduleID.size() > 0) {
-                for (int i = 0; i < Instroctorid.size(); i++) {
-                    temp_array.add(Instroctorid.get(i) + "|" + IScheduleID.get(i));
-                    Log.d("tempArray$$$$$", temp_array.toString());
-                }
-                for (String s : temp_array) {
-                    InstrIschlAry += s + ",";
-                    Log.d("InstrIschlAry$$$$$", InstrIschlAry);
-                }
-            }
-        }
-    }
-
-
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -950,6 +545,7 @@ public class ScheduleActivity extends Activity implements AnimationListener {
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.requestshadow);
                 Button send_request = (Button) dialog.findViewById(R.id.btn_rs_send_request);
+                final EditText txt_reason = (EditText) dialog.findViewById(R.id.txt_reason);
                 send_request.setOnClickListener(new OnClickListener() {
 
                     @Override
@@ -961,6 +557,7 @@ public class ScheduleActivity extends Activity implements AnimationListener {
                         dialog.dismiss();
                         //				for(int i=0;i<WW_StaticClass.SStudnetID.size();i++){
                         //					SStudnetid = WW_StaticClass.SStudnetID.get(i);
+                        Shadow_reason = txt_reason.getText().toString();
                         new InsertShadowRequest().execute();
                         //				}
                     }
@@ -1152,7 +749,557 @@ public class ScheduleActivity extends Activity implements AnimationListener {
         return dialog;
     }
 
-    ProgressDialog pDialog2;
+    private class GetAllInstructor extends AsyncTask<Void, Void, Void> {
+        ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+            currentDateandTime = format.format(date);
+            navDrawerItems_main.clear();
+            pDialog = new ProgressDialog(ScheduleActivity.this);
+            pDialog.setTitle("Please wait...");
+            pDialog.setMessage("Fetching Instructors...");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            SoapObject request = new SoapObject(AppConfig.NAMESPACE,
+                    AppConfig.Get_InstrctListForMgrBySite_Method);
+            request.addProperty("token", token);
+            request.addProperty("siteid", WW_StaticClass.siteid.toString()
+                    .replaceAll("\\[", "").replaceAll("\\]", ""));
+            request.addProperty("strRScheDate", currentDateandTime);
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+                    SoapEnvelope.VER11); // Make an Envelop for sending as whole
+            envelope.dotNet = true;
+            envelope.setOutputSoapObject(request);
+            Log.i("Request", "Request = " + request);
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(
+                    AppConfig.SOAP_ADDRESS);
+            try {
+                androidHttpTransport.call(
+                        AppConfig.Get_InstrctListForMgrBySite_Action, envelope); // Calling
+                // Web
+                // service
+                SoapObject response = (SoapObject) envelope.getResponse();
+                Log.i(TAG, "" + response.toString());
+                SoapObject mSoapObject1 = (SoapObject) response.getProperty(0);
+                SoapObject mSoapObject2 = (SoapObject) mSoapObject1
+                        .getProperty(0);
+                String code = mSoapObject2.getPropertyAsString(0).toString();
+                Log.i("Code", code);
+                if (code.equalsIgnoreCase("000")) {
+                    getinstructor = true;
+                    Object mSoapObject3 = mSoapObject1.getProperty(1);
+                    Log.i(TAG, "mSoapObject3=" + mSoapObject3);
+                    String resp = mSoapObject3.toString();
+                    JSONObject jo = new JSONObject(resp);
+                    JSONArray jArray = jo.getJSONArray("InstrListBySiteid");
+                    Log.i(TAG, "jArray : " + jArray.toString());
+                    UserId = new ArrayList<String>();
+                    UserName = new ArrayList<String>();
+                    JSONObject jsonObject;
+                    for (int i = 0; i < jArray.length(); i++) {
+                        jsonObject = jArray.getJSONObject(i);
+                        UserName.add(jsonObject.getString("UserName"));
+                        UserId.add(jsonObject.getString("Userid"));
+                    }
+
+                } else {
+                    getinstructor = false;
+                }
+            } catch (SocketException e) {
+                e.printStackTrace();
+                other_problem = true;
+            } catch (SocketTimeoutException e) {
+                e.printStackTrace();
+                other_problem = true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                server_response = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                server_response = true;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            pDialog.dismiss();
+            if (server_response) {
+                server_response = false;
+                onDetectNetworkState().show();
+            } else if (other_problem) {
+                other_problem = false;
+                new GetAllInstructor().execute();
+            } else {
+                if (!getinstructor) {
+                    Toast.makeText(getApplicationContext(),
+                            "No instructor found", Toast.LENGTH_LONG).show();
+                    navDrawerItems_main.add(new AllInstructorItems(
+                            "No instructor found."));
+                } else {
+                    getinstructor = false;
+                    //25-09-2018   default login
+//                    if (UserId.size()==1){
+//                        Instroctorid.add(UserId.get(0));
+//                        Instroctorname.add(UserName.get(0));
+//                    }
+
+                    new GetAttendance().execute();
+                    for (int i = 0; i < UserId.size(); i++) {
+                        navDrawerItems_main.add(new AllInstructorItems(UserName
+                                .get(i)));
+                    }
+                    adapter_main = new AllInstructorListAdapter(
+                            getApplicationContext(), navDrawerItems_main);
+                    lv_filter_instructor.setAdapter(adapter_main);
+                    displayView_Main(0);
+                }
+            }
+        }
+    }
+//      Megha  change by getAttendanceMultiple
+//private class GetCurrentSchedule extends AsyncTask<Void, Void, Void> {
+//    ProgressDialog pd;
+//
+//    @Override
+//    protected void onPreExecute() {
+//        // TODO Auto-generated method stub
+//        super.onPreExecute();
+//        Date date = new Date();
+//            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+//            currentDateandTime = format.format(date);
+//    }
+//
+//    @Override
+//    protected Void doInBackground(Void... params) {
+//        // TODO Auto-generated method stub
+//        for (int j = 0; j < Instroctorid.size(); j++) {
+//            SoapObject request = new SoapObject(AppConfig.NAMESPACE,
+//                    AppConfig.GetAttendanceList_Multiple_Method);
+//            request.addProperty("token", WW_StaticClass.UserToken);
+//            request.addProperty("Rinstructorid", Instroctorid.get(j));
+//            request.addProperty("strRScheDate", currentDateandTime);
+//
+//            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+//                    SoapEnvelope.VER11); // Make an Envelop for sending as whole
+//            envelope.dotNet = true;
+//            envelope.setOutputSoapObject(request);
+//            Log.i("Request", "Request = " + request);
+//            HttpTransportSE androidHttpTransport = new HttpTransportSE(
+//                    AppConfig.SOAP_ADDRESS);
+//            try {
+//                androidHttpTransport.call(AppConfig.GetAttendanceList_Multiple_Action,
+//                        envelope); // Calling
+//                // Web
+//                // service
+//                SoapObject response = (SoapObject) envelope.bodyIn;
+//                Log.i("here", "Result : " + response.toString());
+//                SoapPrimitive sp1 = (SoapPrimitive) response.getProperty(0);
+//                String resp = sp1.toString();
+//                Log.i(TAG, "resp : " + resp);
+//                JSONObject jo = new JSONObject(resp);
+//                wu_avail = jo.getInt("wu_avail");
+//                Log.i(TAG, "wu_avail : " + wu_avail);
+//                if (wu_avail == 0) {
+//                    JSONArray jArray = jo.getJSONArray("Attendance");
+//                    JSONArray jArray2;
+//                    JSONObject jsonObject, jsonObject2;
+//                    for (int k = 0; k < jArray.length(); k++) {
+//                        jsonObject = jArray.getJSONObject(k);
+//                        jArray2 = jsonObject.getJSONArray("Items");
+//                        for (int i = 0; i < jArray2.length(); i++) {
+//                            jsonObject2 = jArray2.getJSONObject(i);
+//
+//                        }
+//                    }
+//                } else if (wu_avail == 1 || wu_avail == 2) {
+//                    JSONArray jArray = jo.getJSONArray("Attendance");
+//                    JSONArray jArray2, jArray3;
+//                    JSONObject jsonObject, jsonObject2, jsonObject3;
+//                    for (int k = 0; k < jArray.length(); k++) {
+//                        jsonObject = jArray.getJSONObject(k);
+//                        jArray2 = jsonObject.getJSONArray("Items");
+//                        for (int i = 0; i < jArray2.length(); i++) {
+//                            jsonObject2 = jArray2.getJSONObject(i);
+//
+//                            IScheduleID.add(jsonObject2
+//                                    .getString("IScheduleID"));
+//                            Log.i(TAG, "IScheduleIDViewCurrent : " + IScheduleID.toString());
+//
+//
+//                        }
+//                    }
+//                }
+//            } catch (SocketTimeoutException e) {
+//                e.printStackTrace();
+//                connectionout = true;
+//            } catch (SocketException e) {
+//                e.printStackTrace();
+//                connectionout = true;
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//                server_response = false;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                server_response = false;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    @Override
+//    protected void onPostExecute(Void result) {
+//        // TODO Auto-generated method stub
+//        super.onPostExecute(result);
+//
+//        try {
+//            pd.dismiss();
+//            if (server_response) {
+//                server_response = false;
+//                onDetectNetworkState().show();
+//            } else if (connectionout) {
+//                connectionout = false;
+//                new GetCurrentSchedule().execute();
+//            } else {
+//                ArrayList<String> temp_array = new ArrayList<String>();
+//            if (Instroctorid.size() > 0 && IScheduleID.size() > 0) {
+//                for (int i = 0; i < Instroctorid.size(); i++) {
+//                    temp_array.add(Instroctorid.get(i) + "|" +IScheduleID.get(i).toString());
+//                    Log.d("tempArray$$$$$", temp_array.toString());
+//                }
+//                for (String s : temp_array) {
+//                    InstrIschlAry += s + ",";
+//                    Log.d("InstrIschlAry$$$$$", InstrIschlAry);
+//                }
+//            }
+//            }
+//        } catch (ArrayIndexOutOfBoundsException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//            e.printStackTrace();
+//        }
+//    }
+//}
+
+    private class GetISAAlert extends AsyncTask<Void, Void, Void> {
+        String DateandTime = "";
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+            DateandTime = format.format(date);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            SoapObject request = new SoapObject(AppConfig.NAMESPACE,
+                    AppConfig.GetISAAlertBySite_Method);
+
+            request.addProperty("token", token);
+            request.addProperty("Rinstructorid", WW_StaticClass.InstructorID.toString()
+                    .replaceAll("\\[", "").replaceAll("\\]", ""));
+            request.addProperty("strRScheDate", DateandTime.toString().trim());
+            Log.e("request--", "" + request);
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+                    SoapEnvelope.VER11); // Make an Envelop for sending as whole
+            envelope.dotNet = true;
+            envelope.setOutputSoapObject(request);
+            Log.i("Request", "Request = " + request);
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(
+                    AppConfig.SOAP_ADDRESS);
+            try {
+                androidHttpTransport.call(AppConfig.GetISAAlertBySite_Action,
+                        envelope); // Calling Web service
+                SoapObject response = (SoapObject) envelope.getResponse();
+                Log.i("Any Aquatics", "Result : " + response.toString());
+                SoapObject mSoapObject1 = (SoapObject) response.getProperty(0);
+                SoapObject mSoapObject2 = (SoapObject) mSoapObject1
+                        .getProperty(0);
+                String code = mSoapObject2.getPropertyAsString(0).toString();
+                if (code.equals("000")) {
+                    getISA = true;
+                    Object mSoapObject3 = mSoapObject1.getProperty(1);
+                    JSONObject jo = new JSONObject(mSoapObject3.toString());
+                    JSONArray jArray = jo.getJSONArray("ISAAlert");
+                    Log.e("jArray--", "" + jArray);
+                    JSONObject jsonObject;
+                    for (int i = 0; i < jArray.length(); i++) {
+                        jsonObject = jArray.getJSONObject(i);
+                        ISAFlag = jsonObject.getBoolean("ISAFlag");
+                    }
+                    Log.i(TAG, "" + ISAFlag);
+                } else {
+                    getISA = false;
+                }
+            } catch (SocketTimeoutException e) {
+                // TODO: handle exception
+                e.printStackTrace();
+                connectionout = true;
+            } catch (SocketException e) {
+                e.printStackTrace();
+                connectionout = true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                server_response = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                server_response = true;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            if (server_response) {
+                server_response = false;
+                if (!ScheduleActivity.this.isFinishing()) {
+                    onDetectNetworkState().show();
+                }
+            } else if (connectionout) {
+                connectionout = false;
+
+                new GetISAAlert().execute();
+
+            } else {
+                if (getISA) {
+                    getISA = false;
+                    if (ISAFlag) {
+                        isa_main.invalidate();
+                        isa_main.setVisibility(View.VISIBLE);
+                        isa_main.startAnimation(animBlink);
+                        ISAFlag = false;
+                    } else {
+                        isa_main.invalidate();
+                        isa_main.clearAnimation();
+                        isa_main.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    isa_main.invalidate();
+                    isa_main.clearAnimation();
+                    isa_main.setVisibility(View.INVISIBLE);
+                }
+            }
+        }
+    }
+
+    public class IamInPool extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            //			WW_StaticClass.Siteid = ViewCurrentScheduleFragment.SiteID.get(0);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            SoapObject request = new SoapObject(AppConfig.NAMESPACE, AppConfig.METHOD_NAME_GETPOOLLIST);
+            request.addProperty("token", token);
+            request.addProperty("siteid", ViewCurrentScheduleFragment.SiteID.get(0));
+            // Log.i(Tag, "Login name"+mEd_User.getText().toString());
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+                    SoapEnvelope.VER11); // Make an Envelop for sending as whole
+            envelope.dotNet = true;
+            envelope.setOutputSoapObject(request);
+            Log.i("Request", "Request = " + request);
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(
+                    AppConfig.SOAP_ADDRESS);
+            PoolId = new ArrayList<String>();
+            PoolName = new ArrayList<String>();
+            try {
+                androidHttpTransport.call(AppConfig.SOAP_ACTION_POOLLIST, envelope); // Calling
+                // Web
+                // service
+
+                SoapObject response = (SoapObject) envelope.getResponse();
+                Log.i("here", "Result : " + response.toString());
+                SoapObject mSoapObject1 = (SoapObject) response.getProperty(0);
+                Log.i("Current Lesson", "mSoapObject1=" + mSoapObject1);
+                SoapObject mSoapObject2 = (SoapObject) mSoapObject1.getProperty(0);
+                Log.i("Current Lesson", "mSoapObject2=" + mSoapObject2);
+                String code = mSoapObject2.getPropertyAsString(0).toString();
+                Log.i("Code", code);
+                //			response.toString();
+                if (code.equals("000")) {
+                    pool_status = true;
+                    Object mSoapObject3 = mSoapObject1.getProperty(1);
+                    Log.i("Current Lesson", "mSoapObject3=" + mSoapObject3);
+                    String resp = mSoapObject3.toString();
+
+
+                    Log.i("here", "Result : " + resp.toString());
+                    JSONObject jobj = new JSONObject(resp);
+                    JSONArray mArray = jobj.getJSONArray("Pools");
+                    for (int i = 0; i < mArray.length(); i++) {
+                        JSONObject mJsonObjectFee = mArray.getJSONObject(i);
+                        PoolId.add(mJsonObjectFee.getString("PoolId"));
+                        PoolName.add(mJsonObjectFee.getString("PoolName"));
+                    }
+                } else {
+                    pool_status = false;
+                }
+            } catch (Exception e) {
+                server_status = true;
+                e.printStackTrace();
+
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result) {
+            dialog = new Dialog(ScheduleActivity.this);
+            if (server_status) {
+                SingleOptionAlertWithoutTitle.ShowAlertDialog(
+                        ScheduleActivity.this, "WaterWorks", "Server not responding.\nPlease check internet connection or try after sometime.", "OK");
+                server_status = false;
+            } else {
+                if (pool_status) {
+                    if (shadow_click) {
+                        showDialog(request_shadow);
+                        shadow_click = false;
+                    } else if (deck_click) {
+                        showDialog(request_deck);
+                        deck_click = false;
+                    } else {
+                        Log.i("Nothing Click", "Nothing Click");
+                    }
+                    pool_status = false;
+                } else {
+                    SingleOptionAlertWithoutTitle.ShowAlertDialog(ScheduleActivity.this, "WaterWorks", "No pool found", "Ok");
+                }
+            }
+        }
+    }
+    // Changes by megha 26-09-2018
+    private class GetAttendance extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+            Date date = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy h:mm a");
+            currentDateandTime = format.format(date);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+            // Changes by megha 26-09-2018
+            Log.d("Megha IstructorID",Instroctorid.toString());
+            if (Instroctorid.size() == 0) {
+                Instroctorid.add(inst_id);
+            }
+//            else {
+                //for (int j = 0; j < Instroctorid.size(); j++) {
+
+                    SoapObject request = new SoapObject(AppConfig.NAMESPACE,
+                            AppConfig.GetAttendanceList_Multiple_Method/*METHOD_NAME_GetAttendanceList*/);
+                    request.addProperty("token", token);
+                    request.addProperty("Rinstructorid", inst_id);
+                    request.addProperty("strRScheDate", currentDateandTime);
+                    //			request.addProperty("strRScheDate","01/18/2015 09:00 AM" );
+
+                    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
+                            SoapEnvelope.VER11); // Make an Envelop for sending as whole
+                    envelope.dotNet = true;
+                    envelope.setOutputSoapObject(request);
+                    Log.i("Request", "Request = " + request);
+                    HttpTransportSE androidHttpTransport = new HttpTransportSE(
+                            AppConfig.SOAP_ADDRESS);
+                    try {
+                        androidHttpTransport.call(AppConfig.GetAttendanceList_Multiple_Action/*SOAP_Action_AttendanceList*/,
+                                envelope); // Calling Web service
+                        SoapObject response = (SoapObject) envelope.bodyIn;
+                        Log.i(TAG, "Result : " + response.toString());
+                        SoapPrimitive sp1 = (SoapPrimitive) response.getProperty(0);
+                        String resp = sp1.toString();
+                        JSONObject jo = new JSONObject(resp);
+                        wu_avail = jo.getInt("wu_avail");
+                        //				ISAFlag = jo.getBoolean("ISAFlag");
+                        if (wu_avail == 0) {
+
+                        } else if (wu_avail == 1 || wu_avail == 2) {
+
+                            JSONArray jArray = jo.getJSONArray("Attendance");
+                            Log.i(TAG, "jArray : " + jArray.toString());
+
+                            JSONObject jsonObject;
+                            JSONObject jsonObject2, jsonObject3;
+                            JSONArray jArray2;
+                            JSONArray jArray3 = null;
+                            IScheduleID.clear();
+                            new_InstructorID.clear();
+                            for (int k = 0; k < jArray.length(); k++) {
+                                jsonObject = jArray.getJSONObject(k);
+                                Log.i(TAG, "jsonObject: " + jsonObject.toString());
+
+                                jArray2 = jsonObject.getJSONArray("Items");
+                                Log.i(TAG, "jArray2 : " + jArray2.toString());
+                                for (int i = 0; i < jArray2.length(); i++) {
+                                    jsonObject2 = jArray2.getJSONObject(i);
+                                    //								SiteID.add(jsonObject2.getString("SiteID"));
+                                    IScheduleID.add(jsonObject2.getString("IScheduleID"));
+                                    // Changes by megha 26-09-2018
+                                    new_InstructorID.add(jsonObject2.getString("InstructorID"));
+                                    Log.i(TAG, "IScheduleID+InstructorID : " + IScheduleID.toString()+"|"+new_InstructorID.toString());
+                                }
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (SocketTimeoutException e) {
+                        // TODO: handle exception
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                //}
+//            }
+            Log.d("Megha IstructorID",inst_id);
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            // TODO Auto-generated method stub
+            super.onPostExecute(result);
+            // Changes by megha 26-09-2018
+            InstrIschlAry = "";
+            ArrayList<String> temp_array = new ArrayList<String>();
+            if (new_InstructorID.size()>0&&IScheduleID.size()>0){
+                for (int i = 0; i < new_InstructorID.size(); i++) {
+                    temp_array.add(new_InstructorID.get(i) + "|" + IScheduleID.get(i).toString());
+                    Log.d("tempArray$$$$$", temp_array.toString());
+                }
+                for (String s : temp_array) {
+                    InstrIschlAry += s + ",";
+                    Log.d("InstrIschlAry$$$$$", InstrIschlAry);
+                }
+            }
+        }
+    }
 
     public class InsertShadowRequest extends AsyncTask<Void, Void, Void> {
         @Override
@@ -1164,13 +1311,15 @@ public class ScheduleActivity extends Activity implements AnimationListener {
         @Override
         protected Void doInBackground(Void... params) {
             // TODO Auto-generated method stub
+
             SoapObject request = new SoapObject(AppConfig.NAMESPACE,
-                    AppConfig.METHOD_NAME_InsertShadowRequest_New1);
+                    AppConfig.METHOD_NAME_InsertShadowRequest_LA/*METHOD_NAME_InsertShadowRequest_New1*/);
 
             request.addProperty("token", token);
-            request.addProperty("RPoolID", Shadow_poolid);
+            //request.addProperty("RPoolID", Shadow_poolid);
+            request.addProperty("RPoolID", 0);
             request.addProperty("InstrIschlAry", InstrIschlAry);
-
+            request.addProperty("Reason", Shadow_reason);
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
                     SoapEnvelope.VER11); // Make an Envelop for sending as whole
             envelope.dotNet = true;
@@ -1179,7 +1328,7 @@ public class ScheduleActivity extends Activity implements AnimationListener {
             HttpTransportSE androidHttpTransport = new HttpTransportSE(
                     AppConfig.SOAP_ADDRESS);
             try {
-                androidHttpTransport.call(AppConfig.SOAP_Action_InsertShadowRequest_New1,
+                androidHttpTransport.call(AppConfig.SOAP_Action_InsertShadowRequest_LA,
                         envelope); // Calling Web service
                 SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
                 Log.i("here", "Result : " + response.toString());

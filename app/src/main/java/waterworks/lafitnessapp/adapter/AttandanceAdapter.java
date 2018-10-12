@@ -23,6 +23,7 @@ import waterworks.lafitnessapp.WW_StaticClass;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -78,6 +79,7 @@ public class AttandanceAdapter extends BaseAdapter implements AnimationListener{
 	ArrayList<String> newslevel,newddlw,newddlb,newddlr,newschdlevel,checkpos;
 	ArrayList<Integer>newatt;
 	ArrayList<String> newprereqid;
+	ProgressDialog pd;
 //	SparseBooleanArray mChecked = new SparseBooleanArray();
 	public AttandanceAdapter(Context context, ArrayList<AttendanceItems> attItem) {
 		this.context = context;
@@ -1584,6 +1586,12 @@ public class AttandanceAdapter extends BaseAdapter implements AnimationListener{
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
+			pd = new ProgressDialog(context);
+			pd.setTitle("Please wait...");
+			pd.setMessage("Loading...");
+			pd.setCancelable(true);
+			pd.setCanceledOnTouchOutside(false);
+			pd.show();
 			ViewCurrentLessonActivity.fl_vcl_loading.setVisibility(View.VISIBLE);
 			for (int i = 0; i < prereqid.size(); i++) {
 				if(FinalPreReqId.contains(prereqid.get(i))){
@@ -1672,6 +1680,7 @@ public class AttandanceAdapter extends BaseAdapter implements AnimationListener{
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
+			pd.dismiss();
 			ViewCurrentLessonActivity.fl_vcl_loading.setVisibility(View.GONE);
 			if(server_response){
 				onDetectNetworkState().show();

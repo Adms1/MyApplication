@@ -31,6 +31,7 @@ import waterworks.lafitnessapp.WW_StaticClass;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -256,32 +257,21 @@ AnimationListener {
 				ddlB.add(i, data.get(i).getWu_b());
 				ddlR.add(i, data.get(i).getWu_r());
 			}
-			Instructor_ID = data.get(position).getINSTRUCTORID();
+			Instructor_ID = data.get(position).getInstructorID();
 			// getInstructorID
 			try {
-				if (position == 0) {
-					holder.tv_instructorname_row
-					.setText(ScheduleActivity.Instroctorname
-							.get(ScheduleActivity.Instroctorid
-									.indexOf(data.get(position)
-											.getInstructorID()))+" ("+data.get(position).getLessonName()+")");
+
+				if (position ==0) {
+					holder.tv_instructorname_row.setText(data.get(position).getInstructorName()+" "+" ("+data.get(position).getLessonName()+")");//+data.get(position).getInstructorID()
 					holder.tv_instructorname_row.setVisibility(View.VISIBLE);
 				} else {
-					if (data.get(position)
-							.getInstructorID()
-							.toString()
-							.equalsIgnoreCase(
-									data.get(position - 1).getInstructorID()
-									.toString())) {
+					if (data.get(position).getInstructorID().toString().equalsIgnoreCase(data.get(position - 1).getInstructorID().toString())) {
 						holder.tv_instructorname_row.setText("");
 						holder.tv_instructorname_row.setVisibility(View.GONE);
 
 					} else {
 						holder.tv_instructorname_row
-						.setText(ScheduleActivity.Instroctorname
-								.get(ScheduleActivity.Instroctorid
-										.indexOf(data.get(position)
-												.getInstructorID()))+" ("+data.get(position).getLessonName()+")");
+						.setText(data.get(position).getInstructorName()+" "+" ("+data.get(position).getLessonName()+")");//+data.get(position).getInstructorID()+
 						holder.tv_instructorname_row.setVisibility(View.VISIBLE);
 					}
 				}
@@ -1996,13 +1986,18 @@ AnimationListener {
 	}
 
 	String username, password;
-
+	ProgressDialog pd;
 	private class Insert_Attandance extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-
+			pd = new ProgressDialog(context);
+			pd.setTitle("Please wait...");
+			pd.setMessage("Loading...");
+			pd.setCancelable(true);
+			pd.setCanceledOnTouchOutside(false);
+			pd.show();
 			for (int i = 0; i < prereqid.size(); i++) {
 				if (FinalPreReqId.contains(prereqid.get(i))) {
 
@@ -2130,6 +2125,7 @@ AnimationListener {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
+			pd.dismiss();
 			if (server_response) {
 				server_response = false;
 				onDetectNetworkState().show();

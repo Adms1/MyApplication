@@ -8,12 +8,12 @@ public class ViewCurrentScheduleAdapterItem {
 	public static Button btn_send_att,btn_send_review;
 	int wu_avail;
 	String ExistSwimComp, IsShowSmCampStatus, att, wu_attendancetaken,
-			ISAAlert, SScheduleID, IScheduleID, InstructorID, lessontypeid,
+			ISAAlert, SScheduleID, IScheduleID, InstructorID, InstructorName,lessontypeid,
 			SAge, SLevel, ScheLevel, StudentID, OrderDetailID, StTimeHour,
 			StTimeMin, SLastName, SFirstName, wu_count, wu_Prev, wu_Next,
 			ParentFirstName, ParentLastName, BirthDay, LessonName, LvlAdvAvail,
 			Comments, wu_comments, SwimComp, SkillsCount, StudentGender,
-			NewUser, INSTRUCTORNAME, INSTRUCTORID, Temp_StTimeHour,
+			NewUser, /*INSTRUCTORNAME, INSTRUCTORID, */Temp_StTimeHour,
 			Temp_StTimeMin, MainScheduleDate, wu_w, wu_b, wu_r, SiteID, ClsLvl,
 			PaidClasses;
 
@@ -22,7 +22,7 @@ public class ViewCurrentScheduleAdapterItem {
 	public ViewCurrentScheduleAdapterItem(int wu_avail, String existSwimComp,
 			String isShowSmCampStatus, String att, String wu_attendancetaken,
 			String iSAAlert, String sScheduleID, String iScheduleID,
-			String instructorID, String lessontypeid, String sAge,
+			String instructorID,String instructorName, String lessontypeid, String sAge,
 			String sLevel, String scheLevel, String studentID,
 			String orderDetailID, String stTimeHour, String stTimeMin,
 			String sLastName, String sFirstName, String wu_count,
@@ -47,6 +47,7 @@ public class ViewCurrentScheduleAdapterItem {
 		SScheduleID = sScheduleID;
 		IScheduleID = iScheduleID;
 		InstructorID = instructorID;
+		InstructorName=instructorName;
 		this.lessontypeid = lessontypeid;
 		SAge = sAge;
 		SLevel = sLevel;
@@ -76,8 +77,8 @@ public class ViewCurrentScheduleAdapterItem {
 		PreReqChecked = preReqChecked;
 		LevelName = levelName;
 		LevelID = levelID;
-		this.INSTRUCTORNAME = INSTRUCTORNAME;
-		this.INSTRUCTORID = INSTRUCTORID;
+//		this.INSTRUCTORNAME = INSTRUCTORNAME;
+//		this.INSTRUCTORID = INSTRUCTORID;
 		this.Temp_StTimeHour = Temp_StTimeHour;
 		this.Temp_StTimeMin = Temp_StTimeMin;
 		this.MainScheduleDate = MainScheduleDate;
@@ -87,6 +88,14 @@ public class ViewCurrentScheduleAdapterItem {
 		this.SiteID = SiteID;
 		this.ClsLvl =ClsLvl;
 		this.PaidClasses = PaidClasses;
+	}
+
+	public String getInstructorName() {
+		return InstructorName;
+	}
+
+	public void setInstructorName(String instructorName) {
+		InstructorName = instructorName;
 	}
 
 	public int getWu_avail() {
@@ -393,21 +402,21 @@ public class ViewCurrentScheduleAdapterItem {
 		LevelID = levelID;
 	}
 
-	public String getINSTRUCTORNAME() {
-		return INSTRUCTORNAME;
-	}
-
-	public void setINSTRUCTORNAME(String iNSTRUCTORNAME) {
-		INSTRUCTORNAME = iNSTRUCTORNAME;
-	}
-
-	public String getINSTRUCTORID() {
-		return INSTRUCTORID;
-	}
-
-	public void setINSTRUCTORID(String iNSTRUCTORID) {
-		INSTRUCTORID = iNSTRUCTORID;
-	}
+//	public String getINSTRUCTORNAME() {
+//		return INSTRUCTORNAME;
+//	}
+//
+//	public void setINSTRUCTORNAME(String iNSTRUCTORNAME) {
+//		INSTRUCTORNAME = iNSTRUCTORNAME;
+//	}
+//
+//	public String getINSTRUCTORID() {
+//		return INSTRUCTORID;
+//	}
+//
+//	public void setINSTRUCTORID(String iNSTRUCTORID) {
+//		INSTRUCTORID = iNSTRUCTORID;
+//	}
 
 	public String getTemp_StTimeHour() {
 		return Temp_StTimeHour;
