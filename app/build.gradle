@@ -20,8 +20,8 @@ android {
         applicationId "waterworks.lafitnessapp"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 60
-        versionName "6.8"
+        versionCode 61
+        versionName "6.9"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
 

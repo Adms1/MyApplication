@@ -52,12 +52,14 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
             WU_Att, clockInStr;
     String[] spiltkey = new String[0];
     int whatclick = 0;
-    String btnclick, Timemsg;
-    ArrayList<String> ticktype, juid, jobtitle, Msg;
-    LinearLayout ll_clockinday, ll_clockinbrk, ll_clockoutday, ll_clockoutbrk;
-    String reasonStr = "", checkboxValueStr = "";
+    private String btnclick, Timemsg;
+    private ArrayList<String> ticktype, juid, jobtitle, Msg;
+    private LinearLayout ll_clockinday, ll_clockinbrk, ll_clockoutday, ll_clockoutbrk;
+    private String reasonStr = "", checkboxValueStr = "";
+    private String clockInTypeStr = "0",clockInForBreakStr = "0";
     //code by megha
     int CheckTimeLength;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,6 +303,39 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
                             public void onClick(DialogInterface dialog, int id) {
                                 new ProcessTimeClicks().execute();
 //                                AlertReasonDialog();
+
+                            }
+                        })
+                .setNegativeButton("No, I will clock in later",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+    }
+
+    public void AlertDialogMsgForClockInBreakEarly() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                ClockinoutActivity.this);
+
+        alertDialogBuilder.setIcon(getResources().getDrawable(R.drawable.ic_launcher));
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("You are clocking in more than 2 minutes before the end of your lunch break. Are you sure you want to continue?")
+                .setCancelable(false)
+                .setPositiveButton("Yes, clock me in now",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  new ProcessTimeClicks().execute();
+                                AlertReasonDialog();
 
                             }
                         })
@@ -757,8 +792,10 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
                         Timemsg = spiltkey[1];
 //                        spiltkey[0]="1";
                         if (spiltkey[0].equalsIgnoreCase("0")) {
+                            clockInTypeStr = spiltkey[0];
                             new ProcessTimeClicks().execute();
                         } else {
+                            clockInTypeStr = spiltkey[0];
                             AlertDialogMsg();
                         }
                     } catch (Exception e) {
@@ -973,9 +1010,11 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
                         spiltkey = clockInStr.split("\\|");
                         Timemsg = spiltkey[1];
                         if (spiltkey[0].equalsIgnoreCase("0")) {
+                            clockInForBreakStr = spiltkey[0];
                             new ProcessTimeClicks().execute();
                         } else {
-                            AlertDialogMsg();
+                            clockInForBreakStr = spiltkey[0];
+                            AlertDialogMsgForClockInBreakEarly();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -1121,18 +1160,16 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
         @Override
         protected Void doInBackground(Void... params) {
             // TODO Auto-generated method stub
-            SoapObject request = new SoapObject(AppConfig.NAMESPACE,
-                    AppConfig.AddTickReasonSession);
+            SoapObject request = new SoapObject(AppConfig.NAMESPACE,AppConfig.AddTickReasonSession);
             // Adding Username and Password for Login Invok
-            request.addProperty("token", token);
-            request.addProperty("strReason", reasonStr);
-            request.addProperty("hdnTick", btnclick);
+            request.addProperty("token",token);
+            request.addProperty("strReason",reasonStr);
+            request.addProperty("hdnTick",btnclick);
             request.addProperty("TimeMsg", Timemsg);
-            request.addProperty("strUserName", UserName);
-            request.addProperty("UserId", userid);
+            request.addProperty("strUserName",UserName);
+            request.addProperty("UserId",userid);
 
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
-                    SoapEnvelope.VER11); // Make an Envelop for sending as whole
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11); // Make an Envelop for sending as whole
             envelope.dotNet = true;
             envelope.setOutputSoapObject(request);
             Log.i("Request", "Request = " + request);
@@ -1190,9 +1227,14 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
 
             } else {
                 if (CheckTimeClicks_status) {
-//                    CheckTimeClicks_status = true;
+                    CheckTimeClicks_status = true;
                     try {
 //                        new CheckTimeClicks().execute();
+                        if(whatclick == 3){
+                            new ProcessTimeClicks().execute();
+                            clockInForBreakStr = "0";
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1489,6 +1531,39 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
                                                                 .toString();
 //                                                new ProcessTimeClicks().execute();
                                                         new CheckClockOut().execute();
+
+
+                                                        try {
+
+                                                            LinearLayout v1 = null;
+                                                            if (whatclick == 1) {
+                                                                v1 = ll_clockinday;
+                                                                ll_clockinbrk.removeAllViews();
+                                                                ll_clockinday.removeAllViews();
+                                                                ll_clockoutbrk.removeAllViews();
+                                                                ll_clockoutday.removeAllViews();
+                                                            } else if (whatclick == 2) {
+                                                                v1 = ll_clockoutbrk;
+                                                                ll_clockinbrk.removeAllViews();
+                                                                ll_clockinday.removeAllViews();
+                                                                ll_clockoutbrk.removeAllViews();
+                                                                ll_clockoutday.removeAllViews();
+                                                            } else if (whatclick == 3) {
+                                                                v1 = ll_clockinbrk;
+                                                                ll_clockinbrk.removeAllViews();
+                                                                ll_clockinday.removeAllViews();
+                                                                ll_clockoutbrk.removeAllViews();
+                                                                ll_clockoutday.removeAllViews();
+                                                            } else if (whatclick == 4) {
+                                                                v1 = ll_clockoutday;
+                                                                ll_clockinbrk.removeAllViews();
+                                                                ll_clockinday.removeAllViews();
+                                                                ll_clockoutbrk.removeAllViews();
+                                                                ll_clockoutday.removeAllViews();
+                                                            }
+                                                        }catch (Exception ex){
+                                                            ex.printStackTrace();
+                                                        }
                                                     }
                                                 });
                                                 v.addView(childView);
@@ -1527,18 +1602,49 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
                                                 @Override
                                                 public void onClick(View v) {
                                                     // TODO Auto-generated method stub
-                                                    julinkid = tv_name.getTag()
-                                                            .toString();
+                                                    julinkid = tv_name.getTag().toString();
 //                                            new ProcessTimeClicks().execute();
 
-                                                    if (whatclick == 1) {
-                                                        new CheckClockIn().execute();
-                                                    } else if (whatclick == 2) {
-                                                        new CheckClockOutForBreak().execute();
-                                                    } else if (whatclick == 3) {
-                                                        new CheckClockInFromBreak().execute();
-                                                    } else if (whatclick == 4) {
-                                                        new CheckClockOut().execute();
+                                                    LinearLayout v1 = null;
+
+                                                    try {
+
+
+                                                        if (whatclick == 1) {
+                                                            new CheckClockIn().execute();
+
+                                                            v1 = ll_clockinday;
+                                                            ll_clockinbrk.removeAllViews();
+                                                            ll_clockinday.removeAllViews();
+                                                            ll_clockoutbrk.removeAllViews();
+                                                            ll_clockoutday.removeAllViews();
+
+                                                        } else if (whatclick == 2) {
+                                                            new CheckClockOutForBreak().execute();
+                                                            v1 = ll_clockoutbrk;
+                                                            ll_clockinbrk.removeAllViews();
+                                                            ll_clockinday.removeAllViews();
+                                                            ll_clockoutbrk.removeAllViews();
+                                                            ll_clockoutday.removeAllViews();
+
+                                                        } else if (whatclick == 3) {
+                                                            new CheckClockInFromBreak().execute();
+                                                            v1 = ll_clockinbrk;
+                                                            ll_clockinbrk.removeAllViews();
+                                                            ll_clockinday.removeAllViews();
+                                                            ll_clockoutbrk.removeAllViews();
+                                                            ll_clockoutday.removeAllViews();
+
+                                                        } else if (whatclick == 4) {
+                                                            new CheckClockOut().execute();
+                                                            v1 = ll_clockoutday;
+                                                            ll_clockinbrk.removeAllViews();
+                                                            ll_clockinday.removeAllViews();
+                                                            ll_clockoutbrk.removeAllViews();
+                                                            ll_clockoutday.removeAllViews();
+                                                        }
+                                                    }catch (Exception ex){
+                                                        ex.printStackTrace();
                                                     }
 
                                                 }
@@ -1755,15 +1861,81 @@ public class ClockinoutActivity extends Activity implements OnClickListener {
 
                         // show it
                         alertDialog.show();
-                    } else {
+                    } else if(whatclick == 1) {
+                        if (clockInTypeStr.equalsIgnoreCase("0")) {
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                    ClockinoutActivity.this);
+                            alertDialogBuilder.setCancelable(false);
+                            // set title
+                            alertDialogBuilder.setTitle(getString(R.string.app_name));
+                            alertDialogBuilder.setIcon(getResources()
+                                    .getDrawable(R.drawable.ic_launcher));
+
+                            // set dialog message
+                            alertDialogBuilder
+                                    .setMessage(processMsg)
+                                    .setCancelable(false)
+                                    .setPositiveButton(
+                                            "Ok", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    recreate();
+                                                }
+                                            });
+
+                            // create alert dialog
+                            AlertDialog alertDialog = alertDialogBuilder
+                                    .create();
+
+                            // show it
+                            alertDialog.show();
+
+                        } else {
+                            AlertReasonDialog();
+                        }
+                        clockInTypeStr = "0";
+
+                    }else if(whatclick == 3){
+                        if (clockInForBreakStr.equalsIgnoreCase("0")) {
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                    ClockinoutActivity.this);
+                            alertDialogBuilder.setCancelable(false);
+                            // set title
+                            alertDialogBuilder.setTitle(getString(R.string.app_name));
+                            alertDialogBuilder.setIcon(getResources()
+                                    .getDrawable(R.drawable.ic_launcher));
+
+                            // set dialog message
+                            alertDialogBuilder
+                                    .setMessage(processMsg)
+                                    .setCancelable(false)
+                                    .setPositiveButton(
+                                            "Ok",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(
+                                                        DialogInterface dialog,
+                                                        int id) {
+                                                    recreate();
+                                                }
+                                            });
+
+                            // create alert dialog
+                            AlertDialog alertDialog = alertDialogBuilder
+                                    .create();
+
+                            // show it
+                            alertDialog.show();
+
+                        } else {
+                            AlertDialogMsgForClockInBreakEarly();
+                        }
+                        clockInForBreakStr = "0";
+
+                    }else{
                         AlertReasonDialog();
                     }
 
-
                 } else {
-                    SingleOptionAlertWithoutTitle.ShowAlertDialog(
-                            ClockinoutActivity.this, "LAFitnessApp",
-                            "please login again to clock in / out.", "Ok");
+                    SingleOptionAlertWithoutTitle.ShowAlertDialog(ClockinoutActivity.this, "LAFitnessApp", "please login again to clock in / out.", "Ok");
                 }
             }
 
