@@ -15,7 +15,6 @@ repositories {
 android {
     compileSdkVersion 26
 
-
     defaultConfig {
         applicationId "waterworks.lafitnessapp"
         minSdkVersion 14

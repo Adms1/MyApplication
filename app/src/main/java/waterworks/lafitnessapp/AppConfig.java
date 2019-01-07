@@ -131,8 +131,6 @@ public class AppConfig {
 
 	public static String GETISAAlertBySite1_Action = NAMESPACE+"GetISAAlertBySite";
 
-
-
 	// SOAP METHOD
 	public static String METHOD_NAME_SendAttForReview = "SendAttForReview";
 	public static String Login_Method = "Login";
